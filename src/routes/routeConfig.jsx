@@ -4,6 +4,7 @@ import AuthLayout from "../layouts/AuthLayout";
 
 import HomePage from "../pages/public/HomePage";
 import LoginPage from "../pages/auth/LoginPage";
+import RegisterPage from "../pages/auth/RegisterPage";
 import OverviewPage from "../pages/dashboard/OverviewPage";
 
 const routeConfig = [
@@ -22,10 +23,14 @@ const routeConfig = [
         path: "/auth",
         element: <AuthLayout />,
         children: [
-        {
-            path: "login",
-            element: <LoginPage />,
-        },
+            {
+                path: "login",
+                element: <LoginPage />,
+            },
+            {
+                path: "register",
+                element: <RegisterPage />,
+            },
         ],
     },
 
