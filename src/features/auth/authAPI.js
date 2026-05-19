@@ -1,3 +1,5 @@
+import { ROLES } from "../../constants/permissions";
+
 const fakeDelay = (ms = 1500) =>
     new Promise((resolve) =>
         setTimeout(resolve, ms)
@@ -41,13 +43,7 @@ export const registerAPI = async (formData) => {
     }
 
     // Roles
-    const roles = [
-        "super_admin",
-        "branch_head",
-        "inventory_staff",
-        "auditor",
-        "maintenance_staff",
-    ];
+    const roles = Object.values(ROLES);
 
     // Random Role
     const randomRole =
