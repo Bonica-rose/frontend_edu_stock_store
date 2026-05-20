@@ -16,6 +16,8 @@ import LoginPage from "../pages/auth/LoginPage";
 import RegisterPage from "../pages/auth/RegisterPage";
 // Dashboard Pages
 import OverviewPage from "../pages/dashboard/OverviewPage";
+import UserProfilePage from "../pages/profile/UserProfilePage";
+import SettingsPage from "../pages/settings/SettingsPage";
 import Logout from "../pages/auth/LogoutPage";
 
 const routeConfig = [
@@ -63,6 +65,14 @@ const routeConfig = [
                     {
                         path: "dashboard",
                         element: <OverviewPage />,
+                    }, 
+                    {
+                        path: "user/profile",
+                        element: <UserProfilePage />,
+                    },
+                    {
+                        path: "settings",
+                        element: <SettingsPage />,
                     },
                     {
                         path: "logout",

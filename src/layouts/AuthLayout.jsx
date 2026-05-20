@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 
 const AuthLayout = () => {
     return (
@@ -8,10 +8,10 @@ const AuthLayout = () => {
             <div className="max-w-md mx-auto flex flex-col items-center">
 
                 {/* Branding */}
-                <div className="text-center mb-10">
+                <Link to="/" className="text-center mb-10">
                     <h1 className="text-4xl text-blue-950 font-bold tracking-tight">Edu Stock&Store</h1>
                     <p className="text-slate-500">Inventory & Asset Management System</p>
-                </div>
+                </Link>
 
                 {/* Auth Card */}
                 <div className="w-full">

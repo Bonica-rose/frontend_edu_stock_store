@@ -5,6 +5,15 @@ const fakeDelay = (ms = 1500) =>
         setTimeout(resolve, ms)
     );
 
+const generateToken = (user) =>
+    btoa(
+        JSON.stringify({
+            id: user.id,
+            email: user.email,
+            role: user.role,
+        })
+    );    
+
 // REGISTER API - Simulates user registration and saves to localStorage
 export const registerAPI = async (formData) => {
 
@@ -12,47 +21,32 @@ export const registerAPI = async (formData) => {
 
     // Get existing users
     const registeredUsers =
-        JSON.parse(
-            localStorage.getItem("registeredUsers")
-        ) || [];
+        JSON.parse(localStorage.getItem("registeredUsers")) || [];
 
     // Check existing email
     const emailExists = registeredUsers.find(
-        (user) =>
-            user.email === formData.email
+        (user) => user.email.toLowerCase() === formData.email.toLowerCase()
     );
 
     if (emailExists) {
-        throw new Error(
-            "Email already registered"
-        );
+        throw new Error("Email already registered");        
     }
 
     // Check existing username
     const usernameExists =
         registeredUsers.find(
-            (user) =>
-                user.username ===
-                formData.username
+            (user) => user.username === formData.username
         );
 
     if (usernameExists) {
-        throw new Error(
-            "Username already taken"
-        );
+        throw new Error("Username already taken");
     }
 
     // Roles
     const roles = Object.values(ROLES);
 
     // Random Role
-    const randomRole =
-        roles[
-            Math.floor(
-                Math.random() *
-                roles.length
-            )
-        ];
+    const randomRole = roles[Math.floor(Math.random() * roles.length)];
 
     // Create new user
     const newUser = {
@@ -68,30 +62,10 @@ export const registerAPI = async (formData) => {
     // Save to users array
     registeredUsers.push(newUser);
 
-    localStorage.setItem(
-        "registeredUsers",
-        JSON.stringify(registeredUsers)
-    );
+    localStorage.setItem("registeredUsers", JSON.stringify(registeredUsers));
 
     // Fake token
-    const token = btoa(
-        JSON.stringify({
-            id: newUser.id,
-            email: newUser.email,
-            role: newUser.role,
-        })
-    );
-
-    // Save logged user
-    localStorage.setItem(
-        "token",
-        token
-    );
-
-    localStorage.setItem(
-        "user",
-        JSON.stringify(newUser)
-    );
+    const token = generateToken(newUser);
 
     return {
         user: newUser,
@@ -106,9 +80,7 @@ export const loginAPI = async (formData) => {
 
     // Get registered users
     const registeredUsers =
-        JSON.parse(
-            localStorage.getItem("registeredUsers")
-        ) || [];
+        JSON.parse(localStorage.getItem("registeredUsers")) || [];
 
     // Find matching user
     const foundUser =
@@ -121,30 +93,15 @@ export const loginAPI = async (formData) => {
         );
 
     if (!foundUser) {
-        throw new Error(
-            "Invalid email or password"
-        );
+        throw new Error("Invalid email or password");
     }
 
     // Fake token
-    const token = btoa(
-        JSON.stringify({
-            id: foundUser.id,
-            email: foundUser.email,
-            role: foundUser.role,
-        })
-    );
+    const token = generateToken(foundUser);
 
     // Save logged in user
-    localStorage.setItem(
-        "token",
-        token
-    );
-
-    localStorage.setItem(
-        "user",
-        JSON.stringify(foundUser)
-    );
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(foundUser));
 
     return {
         user: foundUser,

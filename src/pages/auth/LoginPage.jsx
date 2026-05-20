@@ -28,26 +28,16 @@ const LoginPage = () => {
     });
 
     const onSubmit = async(formData) => {
-        // dispatch(loginUser(formData));
         try {
-            const result = await dispatch(loginUser(formData));
-            toast.success("Login Successful");
+            const result = await dispatch(loginUser(formData)).unwrap();
+            console.log("Login Success:", result);
+            toast.success("Login successful");
             navigate("/edu/dashboard");
         } catch (error) {
-            toast.error(error.message);
+            console.log("Login Error:", error);
+            toast.error(error);
         }
     };
-
-    // useEffect(() => {
-    //     if (isAuthenticated) {
-    //         toast.success("Login successful");
-    //         navigate("/edu/dashboard");
-    //     }
-
-    //     if (error) {
-    //         toast.error(error);
-    //     }
-    // }, [isAuthenticated, error]);
 
     return (
         <div className="w-full max-w-md bg-blue-950 border border-slate-800 rounded-2xl shadow-2xl p-8">

@@ -154,16 +154,16 @@ const Navbar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) => {
                     {openDropdown && (
                         <div className="absolute right-0 mt-2 w-52 bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden">
 
-                            <button
+                            <Link to="/edu/user/profile"
                                 className="w-full px-4 py-3 hover:bg-slate-50 flex items-center gap-3 text-[15.4px]">
                                 <MdPerson size={20} />
                                 Profile
-                            </button>
+                            </Link>
 
-                            <button className="w-full px-4 py-3 hover:bg-slate-50 flex items-center gap-3 text-[15.4px]">
+                            <Link to="/edu/settings" className="w-full px-4 py-3 hover:bg-slate-50 flex items-center gap-3 text-[15.4px]">
                                 <MdSettings size={20} />
                                 Settings
-                            </button>
+                            </Link>
 
                             <div className="border-t"></div>
 

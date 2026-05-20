@@ -20,7 +20,7 @@ import {
 const RegisterPage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { loading, error, isAuthenticated } = useSelector((state) => state.auth);
+    const { loading} = useSelector((state) => state.auth);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -71,20 +71,18 @@ const RegisterPage = () => {
 
     const strength = getStrength();
 
-    const onSubmit = (formData) => {
-        dispatch(registerUser(formData));
-    };
-
-    useEffect(() => {
-        if (isAuthenticated) {
+    const onSubmit = async (formData) => {
+        try {
+            const result = await dispatch(registerUser(formData)).unwrap();
+            console.log("Register Success:", result);
             toast.success("Registration successful");
-            navigate("/auth/login");
-        }
-
-        if (error) {
+            reset();
+            navigate("/edu/dashboard");
+        } catch (error) {
+            console.log("Register Error:", error);
             toast.error(error);
         }
-    }, [isAuthenticated, error]);
+    };   
 
     const PolicyItem = ({ valid, text }) => (
         <div className="flex items-center gap-2 text-sm">
