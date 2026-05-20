@@ -1,72 +1,63 @@
 import { NavLink } from "react-router-dom";
-import { useState } from "react";
 import logoImage from '../assets/logo.png';
-import {
-    FaTachometerAlt,
-    FaBoxes,
-    FaLaptop,
-    FaTruck,
-    FaShoppingCart,
-    FaExchangeAlt,
-    FaChartBar,
-    FaUsers,
-} from "react-icons/fa";
-import { LuGitBranch } from "react-icons/lu";
+import { SIDEBAR_LINKS } from "../constants/sidebarConfig.jsx";
+import { useSelector } from "react-redux";
+
 
 const Sidebar = ({ collapsed, mobileOpen, setMobileOpen }) => {
-    const [openMenu, setOpenMenu] = useState("");
-    const links = [
-        {
-            path: "/edu/dashboard",
-            label: "Dashboard",
-            icon: <FaTachometerAlt />,
-        },
-        {
-            path: "/edu/products",
-            label: "Products",
-            icon: <FaBoxes />,
-        },
-        {
-            path: "/edu/assets",
-            label: "Assets",
-            icon: <FaLaptop />,
-        },
-        {
-            path: "/edu/vendors",
-            label: "Vendors",
-            icon: <FaTruck />,
-        },
-        {
-            path: "/edu/purchases",
-            label: "Purchases",
-            icon: <FaShoppingCart />,
-        },
-        {
-            path: "/edu/stocks",
-            label: "Stock Movement",
-            icon: <FaExchangeAlt />,
-        },
-        {
-            path: "/edu/reports",
-            label: "Reports",
-            icon: <FaChartBar />,
-        },
-        {
-            path: "/edu/branches",
-            label: "Branches",
-            icon: <LuGitBranch />,
-        },
-        {
-            path: "/edu/users",
-            label: "Users",
-            icon: <FaUsers />,
-        },
-    ];
-    const toggleMenu = (label) => {
-        setOpenMenu(openMenu === label ? "" : label);
-    };
+    // const links = [
+    //     {
+    //         path: "/edu/dashboard",
+    //         label: "Dashboard",
+    //         icon: <FaTachometerAlt />,
+    //     },
+    //     {
+    //         path: "/edu/products",
+    //         label: "Products",
+    //         icon: <FaBoxes />,
+    //     },
+    //     {
+    //         path: "/edu/assets",
+    //         label: "Assets",
+    //         icon: <FaLaptop />,
+    //     },
+    //     {
+    //         path: "/edu/vendors",
+    //         label: "Vendors",
+    //         icon: <FaTruck />,
+    //     },
+    //     {
+    //         path: "/edu/purchases",
+    //         label: "Purchases",
+    //         icon: <FaShoppingCart />,
+    //     },
+    //     {
+    //         path: "/edu/stocks",
+    //         label: "Stock Movement",
+    //         icon: <FaExchangeAlt />,
+    //     },
+    //     {
+    //         path: "/edu/reports",
+    //         label: "Reports",
+    //         icon: <FaChartBar />,
+    //     },
+    //     {
+    //         path: "/edu/branches",
+    //         label: "Branches",
+    //         icon: <LuGitBranch />,
+    //     },
+    //     {
+    //         path: "/edu/users",
+    //         label: "Users",
+    //         icon: <FaUsers />,
+    //     },
+    // ];
 
-    
+    const { user } = useSelector((state) => state.auth);
+
+    const filteredLinks = SIDEBAR_LINKS.filter((link) =>
+        link.roles.includes(user?.role)
+    );
 
     return (
         <>
@@ -118,7 +109,7 @@ const Sidebar = ({ collapsed, mobileOpen, setMobileOpen }) => {
 
                 {/* Nav Links */}
                 <nav className="space-y-2 p-4">
-                    {links.map((link) => (
+                    {filteredLinks.map((link) => (
                         <NavLink
                             key={link.path}
                             to={link.path}

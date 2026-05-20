@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState,useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "../../validation/authSchema";
 import { loginUser } from "../../features/auth/authThunks";
+import { USERS } from "../../constants/default";
 import {
     FaEye,
     FaEyeSlash,
@@ -16,28 +17,50 @@ import {
 const LoginPage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { loading, error, isAuthenticated } = useSelector((state) => state.auth);
+    const { loading } = useSelector((state) => state.auth);
     const [showPassword, setShowPassword] = useState(false);
 
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors },
     } = useForm({
         resolver: yupResolver(loginSchema),
     });
+
+    useEffect(() => {        
+        // Only initialize once
+        if (!localStorage.getItem("users")) {
+            localStorage.setItem("users", JSON.stringify(USERS));
+        }
+        if (USERS.length === 1) {
+            const user = USERS[0];
+            // Pre-fill the form with user data
+            reset({
+                email: user.email
+            });
+        }
+        // console.log(new Date(new Date()).toLocaleString('en-IN'));
+    }, [USERS, reset]);
 
     const onSubmit = async(formData) => {
         try {
             const result = await dispatch(loginUser(formData)).unwrap();
             console.log("Login Success:", result);
             toast.success("Login successful");
-            navigate("/edu/dashboard");
+            if (result.user.must_change_password) {
+                navigate("/edu/change-password");
+            } else {
+                navigate("/edu/dashboard");
+            }            
         } catch (error) {
             console.log("Login Error:", error);
             toast.error(error);
         }
     };
+
+    
 
     return (
         <div className="w-full max-w-md bg-blue-950 border border-slate-800 rounded-2xl shadow-2xl p-8">
@@ -61,7 +84,7 @@ const LoginPage = () => {
                             type="email"
                             placeholder="Enter your email"
                             {...register("email")}
-                            className={`w-full bg-slate-100 border 
+                            className={`w-full bg-slate-100 border placeholder:text-[15px]
                                 ${errors.email
                                 ? "border-red-300 focus:ring-2 focus:ring-opacity-50 focus:ring-red-400"
                                 : "border-blue-400 focus:ring-2 focus:ring-opacity-50 focus:ring-blue-400"
@@ -91,7 +114,7 @@ const LoginPage = () => {
                             }
                             placeholder="Enter your password"
                             {...register("password")}
-                            className={`w-full bg-slate-100 border ${
+                            className={`w-full bg-slate-100 border placeholder:text-[15px] ${
                                 errors.password
                                     ? "border-red-300 focus:ring-2 focus:ring-opacity-50 focus:ring-red-400"
                                     : "border-blue-400 focus:ring-2 focus:ring-opacity-50 focus:ring-blue-400"
@@ -132,7 +155,15 @@ const LoginPage = () => {
                     font-semibold text-base py-2 rounded-xl transition duration-300"
                 >
                     {loading
-                        ? "Logging in..."
+                        ? (
+                            <>
+                                <svg className="animate-spin motion-reduce:hidden" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                                </svg>
+                                "Logging in..."
+                            </>
+                        )
                         : "Login"}
                 </button>
                 

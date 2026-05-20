@@ -45,6 +45,30 @@ const PersonalInfoForm = () => {
             >
 
                 {/* Full Name */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    
+                    <div>
+                        <label className="block mb-2 font-medium text-gray-700">
+                            First Name <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            className="w-full border border-gray-400 rounded-lg pl-10 pr-4 py-2 outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block mb-2 font-medium text-gray-700">
+                            Last Name <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            className="w-full border border-gray-400 rounded-lg pl-10 pr-4 py-2 outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all"
+                        />
+                    </div>
+
+                </div>
+
                 <div>
                     <label className="block mb-2 font-medium text-gray-700">
                         Full Name
@@ -69,7 +93,7 @@ const PersonalInfoForm = () => {
                         <input
                             type="email"
                             {...register("email")}
-                            className="w-full border border-gray-300 bg-gray-100 rounded-lg pl-10 pr-4 py-2 outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all"
+                            className="w-full border border-gray-400 rounded-lg pl-10 pr-4 py-2 outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all"
                         />
                     </div>
                 </div>

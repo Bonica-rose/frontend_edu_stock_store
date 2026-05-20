@@ -97,9 +97,9 @@ const Navbar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) => {
                         "
                     >
                         <option>Main Campus</option>
-                        <option>Library</option>
-                        <option>Science Lab</option>
-                        <option>Computer Lab</option>
+                        <option>South Campus</option>
+                        {/* <option>Science Lab</option>
+                        <option>Computer Lab</option> */}
                     </select>
 
                     {/* Dropdown Arrow */}

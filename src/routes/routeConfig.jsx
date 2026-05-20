@@ -1,4 +1,5 @@
 import PublicRoute from "../routes/PublicRoute";
+import ForcePasswordChangeRoute from "../routes/ForcePasswordChangeRoute";
 import ProtectedRoute from "../routes/ProtectedRoute";
 import RoleRoute from "../routes/RoleRoute";
 // Layouts
@@ -19,6 +20,9 @@ import OverviewPage from "../pages/dashboard/OverviewPage";
 import UserProfilePage from "../pages/profile/UserProfilePage";
 import SettingsPage from "../pages/settings/SettingsPage";
 import Logout from "../pages/auth/LogoutPage";
+import UsersPage from "../pages/users/UsersPage";
+import CreateUserPage from "../pages/users/CreateUserPage";
+import ChangePassword from "../pages/profile/ChangePassword";
 
 const routeConfig = [
     // Public Routes
@@ -59,32 +63,59 @@ const routeConfig = [
         element: <ProtectedRoute />,
         children: [
             {
-                path: "/edu",
-                element: <EduLayout />,
+                element: <ForcePasswordChangeRoute />,
                 children: [
                     {
-                        path: "dashboard",
-                        element: <OverviewPage />,
-                    }, 
-                    {
-                        path: "user/profile",
-                        element: <UserProfilePage />,
-                    },
-                    {
-                        path: "settings",
-                        element: <SettingsPage />,
-                    },
-                    {
-                        path: "logout",
-                        element: <Logout />,
-                    },
-                    {
-                        path: "401",
-                        element: <UnauthorizedPage />,
-                    },
-                    {
-                        path: "403",
-                        element: <ForbiddenPage />,
+                        path: "/edu",
+                        element: <EduLayout />,
+                        children: [
+                            {
+                                path: "dashboard",
+                                element: <OverviewPage />,
+                            },
+                            {
+                                path: "change-password",
+                                element: <ChangePassword />,
+                            },
+                            {
+                                path: "user/profile",
+                                element: <UserProfilePage />,
+                            },
+
+                            {
+                                element: (
+                                    <RoleRoute
+                                        allowedRoles={["super_admin"]}
+                                    />
+                                ),
+                                children: [
+                                    {
+                                        path: "settings",
+                                        element: <SettingsPage />,
+                                    },
+                                    {
+                                        path: "users",
+                                        element: <UsersPage />,
+                                    },
+                                    {
+                                        path: "users/create",
+                                        element: <CreateUserPage />,
+                                    },
+                                ],
+                            },
+                            {
+                                path: "logout",
+                                element: <Logout />,
+                            },
+                            {
+                                path: "401",
+                                element: <UnauthorizedPage />,
+                            },
+                            {
+                                path: "403",
+                                element: <ForbiddenPage />,
+                            },
+                        ],
                     },
                 ],
             },

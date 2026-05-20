@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { registerSchema } from "../../validation/authSchema";
 import { registerUser } from "../../features/auth/authThunks";
+import PasswordStrength from "../../components/ui/PasswordStrength";
 import {
     FaEye,
     FaEyeSlash,
@@ -13,8 +14,8 @@ import {
     FaLock,
     FaUser,
     FaUserTag,
-    FaCheckCircle,
-    FaTimesCircle,
+    // FaCheckCircle,
+    // FaTimesCircle,
 } from "react-icons/fa";
 
 const RegisterPage = () => {
@@ -36,40 +37,40 @@ const RegisterPage = () => {
 
     const password = watch("password", "");
 
-        // Password Strength Checks
-    const passwordChecks = {
-        length: password.length >= 8,
-        uppercase: /[A-Z]/.test(password),
-        lowercase: /[a-z]/.test(password),
-        number: /[0-9]/.test(password),
-        special: /[@$!%*?&]/.test(password),
-    };
+    // Password Strength Checks
+    // const passwordChecks = {
+    //     length: password.length >= 8,
+    //     uppercase: /[A-Z]/.test(password),
+    //     lowercase: /[a-z]/.test(password),
+    //     number: /[0-9]/.test(password),
+    //     special: /[@$!%*?&]/.test(password),
+    // };
 
-    const passedChecks = Object.values(passwordChecks).filter(Boolean).length;
+    // const passedChecks = Object.values(passwordChecks).filter(Boolean).length;
 
     // Strength Label
-    const getStrength = () => {
+    // const getStrength = () => {
 
-        if (passedChecks <= 2)
-            return {
-                text: "Weak",
-                color: "bg-red-500",
-            };
+    //     if (passedChecks <= 2)
+    //         return {
+    //             text: "Weak",
+    //             color: "bg-red-500",
+    //         };
 
-        if (passedChecks === 3 || passedChecks === 4)
-            return {
-                text: "Medium",
-                color: "bg-yellow-500",
-            };
+    //     if (passedChecks === 3 || passedChecks === 4)
+    //         return {
+    //             text: "Medium",
+    //             color: "bg-yellow-500",
+    //         };
 
-        return {
-            text: "Strong",
-            color: "bg-green-500",
-        };
+    //     return {
+    //         text: "Strong",
+    //         color: "bg-green-500",
+    //     };
 
-    };
+    // };
 
-    const strength = getStrength();
+    // const strength = getStrength();
 
     const onSubmit = async (formData) => {
         try {
@@ -77,34 +78,34 @@ const RegisterPage = () => {
             console.log("Register Success:", result);
             toast.success("Registration successful");
             reset();
-            navigate("/edu/dashboard");
+            navigate("/auth/login");
         } catch (error) {
             console.log("Register Error:", error);
             toast.error(error);
         }
     };   
 
-    const PolicyItem = ({ valid, text }) => (
-        <div className="flex items-center gap-2 text-sm">
+    // const PolicyItem = ({ valid, text }) => (
+    //     <div className="flex items-center gap-2 text-sm">
 
-            {valid ? (
-                <FaCheckCircle className="text-green-400" />
-            ) : (
-                <FaTimesCircle className="text-red-400" />
-            )}
+    //         {valid ? (
+    //             <FaCheckCircle className="text-green-400" />
+    //         ) : (
+    //             <FaTimesCircle className="text-red-400" />
+    //         )}
 
-            <span
-                className={
-                    valid
-                        ? "text-green-300"
-                        : "text-slate-400"
-                }
-            >
-                {text}
-            </span>
+    //         <span
+    //             className={
+    //                 valid
+    //                     ? "text-green-300"
+    //                     : "text-slate-400"
+    //             }
+    //         >
+    //             {text}
+    //         </span>
 
-        </div>
-    );
+    //     </div>
+    // );
 
     return (
         <div className="w-full max-w-lg bg-blue-950 border border-slate-800 rounded-2xl shadow-2xl p-8">
@@ -233,83 +234,8 @@ const RegisterPage = () => {
                     </div>
 
                     {/* Password Strength */}
-                    {password && (
-                        <div className="mt-4 space-y-3">
-
-                            {/* Strength Bar */}
-                            <div>
-                                <div className="flex items-center justify-between mb-2">
-                                    <span className="text-sm text-slate-300">Password Strength</span>
-                                    <span
-                                        className={`text-sm font-semibold ${
-                                            strength.text ===
-                                            "Weak"
-                                                ? "text-red-400"
-                                                : strength.text ===
-                                                "Medium"
-                                                ? "text-yellow-400"
-                                                : "text-green-400"
-                                        }`}
-                                    >
-                                        {strength.text}
-                                    </span>
-                                </div>
-                                <div className="w-full h-2 bg-slate-700 rounded-full overflow-hidden">
-                                    <div
-                                        className={`h-full ${strength.color} transition-all duration-300`}
-                                        style={{
-                                            width: `${
-                                                (passedChecks /
-                                                    5) *
-                                                100
-                                            }%`,
-                                        }}
-                                    />
-                                </div>
-                            </div>
-                            
-                            {/* Password Policy */}
-                            <div className="bg-slate-800 border border-slate-700 rounded-xl p-4 space-y-2">
-
-                                <PolicyItem
-                                    valid={
-                                        passwordChecks.length
-                                    }
-                                    text="Minimum 8 characters"
-                                />
-
-                                <PolicyItem
-                                    valid={
-                                        passwordChecks.uppercase
-                                    }
-                                    text="At least one uppercase letter"
-                                />
-
-                                <PolicyItem
-                                    valid={
-                                        passwordChecks.lowercase
-                                    }
-                                    text="At least one lowercase letter"
-                                />
-
-                                <PolicyItem
-                                    valid={
-                                        passwordChecks.number
-                                    }
-                                    text="At least one number"
-                                />
-
-                                <PolicyItem
-                                    valid={
-                                        passwordChecks.special
-                                    }
-                                    text="At least one special character(@$!%*?&)"
-                                />
-
-                            </div>
-
-                        </div>
-                    )}
+                    <PasswordStrength password={password} outside={true} />
+                    
 
                     {errors.password && (
                         <p className="text-red-400 text-sm mt-2">

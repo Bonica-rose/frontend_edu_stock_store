@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loginUser, registerUser } from "./authThunks";
+import { loginUser, registerUser, changeUserPassword } from "./authThunks";
 
 const token = localStorage.getItem("token");
 const user = localStorage.getItem("user");
@@ -60,6 +60,24 @@ const authSlice = createSlice({
             state.isAuthenticated = true;
         })
         .addCase(registerUser.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+
+        // CHANGE PASSWORD
+        builder
+        .addCase(changeUserPassword.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        .addCase(changeUserPassword.fulfilled, (state, action) => {
+            state.loading = false;
+            state.error = null;
+
+            // Optional success flag
+            state.flag = action.payload.flag;
+        })
+        .addCase(changeUserPassword.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload;
         });

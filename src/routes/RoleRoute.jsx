@@ -3,19 +3,13 @@ import { Navigate, Outlet } from "react-router-dom";
 
 export default function RoleRoute({ allowedRoles }) {
 
-    const { user } = useSelector(
-        (state) => state.auth
-    );
+    const { user } = useSelector((state) => state.auth);
 
-    // Example:
-    // user.role = "inventory_staff"
+    // Example: user.role = "inventory_staff"
 
     if (!allowedRoles.includes(user?.role)) {
         return (
-            <Navigate
-                to="/edu/403"
-                replace
-            />
+            <Navigate to="/edu/403" replace />
         );
     }
 
