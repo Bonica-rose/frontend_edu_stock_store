@@ -1,25 +1,14 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
-export const updateProfile = createAsyncThunk(
-    "profile/updateProfile",
-    async (data) => {
-        return data;
-    }
-);
+import {
+    fetchProfile,
+    updateUserDetails,
+    updateUserContacts,
+} from "./profileThunk";
 
 const initialState = {
-    currentUser:
-        JSON.parse(localStorage.getItem("profile")) || {
-            fullName: "Babu C V",
-            email: "babu@edu.com",
-            phone: "+91 9876543210",
-            address: "Kollam, Kerala",
-            role: "Inventory Manager",
-            department: "Inventory",
-            branch: "Main Campus",
-            employeeId: "EMP-1001",
-        },
-
+    user_details: null,
+    user_contacts: [],
     loading: false,
     error: null,
 };
@@ -28,28 +17,31 @@ const profileSlice = createSlice({
     name: "profile",
     initialState,
     reducers: {},
-
     extraReducers: (builder) => {
+
         builder
 
-            .addCase(updateProfile.pending, (state) => {
+            // Fetch
+            .addCase(fetchProfile.pending, (state) => {
                 state.loading = true;
             })
 
-            .addCase(updateProfile.fulfilled, (state, action) => {
+            .addCase(fetchProfile.fulfilled, (state, action) => {
                 state.loading = false;
-
-                state.currentUser = action.payload;
-
-                localStorage.setItem(
-                    "profile",
-                    JSON.stringify(action.payload)
-                );
+                state.user_details = action.payload.user_details;
+                state.user_contacts = action.payload.user_contacts;
             })
 
-            .addCase(updateProfile.rejected, (state) => {
+            // Update Personal
+            .addCase(updateUserDetails.fulfilled, (state, action) => {
                 state.loading = false;
-                state.error = "Failed to update profile";
+                state.user_details = action.payload;
+            })
+
+            // Update Contacts
+            .addCase(updateUserContacts.fulfilled, (state, action) => {
+                state.loading = false;
+                state.user_contacts = action.payload;
             });
     },
 });

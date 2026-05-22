@@ -6,7 +6,8 @@ import {
     createUserAPI,
     updateUserAPI,
     deleteUserAPI,
-} from "./userAPI";
+    updateUserStatusAPI,
+} from "./userFakeAPI";
 
 export const fetchUsers = createAsyncThunk(
     "users/fetchUsers",
@@ -71,6 +72,19 @@ export const deleteUser = createAsyncThunk(
         } catch (error) {
             return thunkAPI.rejectWithValue(
                 error.response.data.message
+            );
+        }
+    }
+);
+
+export const updateUserStatus = createAsyncThunk(
+    "users/updateUserStatus",
+    async ({ id, status }, thunkAPI) => {
+        try {
+            return await updateUserStatusAPI({ id, status });
+        } catch (error) {
+            return thunkAPI.rejectWithValue(
+                error.response?.data?.message || "Failed to update status"
             );
         }
     }

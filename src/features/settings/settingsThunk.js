@@ -4,7 +4,17 @@ export const addOrganization = createAsyncThunk(
     "settings/addOrganization",
     async (data) => {
         return {
-            id: Date.now(),
+            id: crypto.randomUUID(),
+            ...data,
+        };
+    }
+);
+
+export const updateOrganization = createAsyncThunk(
+    "settings/updateOrganization",
+    async ({ id, data }) => {
+        return {
+            id,
             ...data,
         };
     }

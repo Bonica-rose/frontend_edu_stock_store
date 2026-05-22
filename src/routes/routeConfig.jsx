@@ -1,7 +1,7 @@
 import PublicRoute from "../routes/PublicRoute";
 import ForcePasswordChangeRoute from "../routes/ForcePasswordChangeRoute";
 import ProtectedRoute from "../routes/ProtectedRoute";
-import RoleRoute from "../routes/RoleRoute";
+import PermissionRoute from "../routes/PermissionRoute";
 // Layouts
 import PublicLayout from "../layouts/PublicLayout";
 import AuthLayout from "../layouts/AuthLayout";
@@ -19,9 +19,12 @@ import RegisterPage from "../pages/auth/RegisterPage";
 import OverviewPage from "../pages/dashboard/OverviewPage";
 import UserProfilePage from "../pages/profile/UserProfilePage";
 import SettingsPage from "../pages/settings/SettingsPage";
+import CreateOrganizationPage from "../pages/settings/CreateOrganizationPage";
+import EditOrganizationPage from "../pages/settings/EditOrganizationPage";
 import Logout from "../pages/auth/LogoutPage";
 import UsersPage from "../pages/users/UsersPage";
 import CreateUserPage from "../pages/users/CreateUserPage";
+import EditUserPage from "../pages/users/EditUserPage";
 import ChangePassword from "../pages/profile/ChangePassword";
 
 const routeConfig = [
@@ -84,8 +87,9 @@ const routeConfig = [
 
                             {
                                 element: (
-                                    <RoleRoute
-                                        allowedRoles={["super_admin"]}
+                                    <PermissionRoute
+                                        module="users"
+                                        action="view"
                                     />
                                 ),
                                 children: [
@@ -94,12 +98,24 @@ const routeConfig = [
                                         element: <SettingsPage />,
                                     },
                                     {
+                                        path: "settings/create",
+                                        element: <CreateOrganizationPage />,
+                                    },
+                                    {
+                                        path: "settings/edit/:id",
+                                        element: <EditOrganizationPage />,
+                                    },
+                                    {
                                         path: "users",
                                         element: <UsersPage />,
                                     },
                                     {
                                         path: "users/create",
                                         element: <CreateUserPage />,
+                                    },
+                                    {
+                                        path: "user/:id",
+                                        element: <EditUserPage />,
                                     },
                                 ],
                             },

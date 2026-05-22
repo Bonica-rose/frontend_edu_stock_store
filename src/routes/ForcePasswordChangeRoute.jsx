@@ -9,8 +9,13 @@ const ForcePasswordChangeRoute = () => {
         location.pathname === "/edu/change-password";
 
     if (user?.must_change_password && !isChangePasswordPage) {
-        return <Navigate to="/edu/change-password" replace />;
+        return <Navigate
+            to="/edu/change-password"
+            replace
+        />;
     }
+
+    // console.log("'From ForcePasswordChange Route - redux user: '", user);
 
     return <Outlet />;
 };

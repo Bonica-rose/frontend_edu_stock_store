@@ -1,39 +1,73 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import {
     fetchUsers,
     deleteUser,
+    updateUserStatus
 } from "../../features/users/userThunks";
 
-import {
-    FaEdit,
-    FaTrash,
-    FaPlus,
-} from "react-icons/fa";
+import {FaPlus,} from "react-icons/fa";
+import DataTable from "../../components/table/DataTable";
+import TableSearch from "../../components/table/TableSearch";
+import TablePagination from "../../components/table/TablePagination";
+import { usersColumns } from "../../components/table/columns/usersColumns.jsx";
 
 const UsersPage = () => {
+    const [search, setSearch] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
     const dispatch = useDispatch();
-    const {
-        users,
-        loading,
-    } = useSelector((state) => state.users);
+    const { users, loading, } = useSelector((state) => state.users);
 
     useEffect(() => {
         dispatch(fetchUsers());
     }, [dispatch]);
 
-    const handleDelete = (id) => {
-        const confirmDelete = window.confirm("Delete this user?");
+    // Search Filter
+    const filteredData = users.filter((u) => {
+        const keyword = search.toLowerCase();
+        return (
+            u.username?.toLowerCase().includes(keyword) ||
+            u.email?.toLowerCase().includes(keyword) ||
+            u.branch_name?.toLowerCase().includes(keyword) ||
+            u.role_name?.toLowerCase().includes(keyword) ||
+            u.status?.toLowerCase() === keyword
+        );
+    });
+    // console.log(filteredData);
+    
 
-        if (confirmDelete) {
-            dispatch(deleteUser(id));
-        }
+    // Pagination
+    const itemsPerPage = 5;
+    const totalPages = Math.ceil(
+        filteredData.length / itemsPerPage
+    );
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const paginatedData = filteredData.slice(
+        startIndex,
+        startIndex + itemsPerPage
+    );
+
+    const toggleStatus = (id, currentStatus) => {
+        const newStatus = currentStatus === "active" ? "inactive" : "active";
+        dispatch(updateUserStatus({ id, status: newStatus }));
+    };
+
+    const handleDelete = (id) => {
+        try {
+            const confirmDelete = window.confirm("Delete this user?");
+            if (confirmDelete) {
+                dispatch(deleteUser(id));
+            }
+        } catch (error) {
+            console.log(error);
+            
+        }        
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-4">
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-bold">
                     Users
@@ -41,76 +75,34 @@ const UsersPage = () => {
 
                 <Link
                     to="/edu/users/create"
-                    className="bg-blue-600 text-white px-4 py-2 rounded-xl flex items-center gap-2"
+                    className="bg-blue-900 text-white px-3 py-2 text-[15px] rounded-lg flex items-center gap-2"
                 >
                     <FaPlus />
                     Add User
                 </Link>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-                <table className="w-full">
-                    <thead className="bg-slate-100">
-                        <tr>
-                            <th className="p-4 text-left">
-                                Username
-                            </th>
-                            <th className="p-4 text-left">
-                                Email
-                            </th>
-                            <th className="p-4 text-left">
-                                Branch
-                            </th>
-                            <th className="p-4 text-left">
-                                Status
-                            </th>
-                            <th className="p-4 text-left">
-                                Actions
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {users?.map((user) => (
-                            <tr key={user._id} className="border-t">
-                                <td className="p-4">
-                                    {user.username}
-                                </td>
+            <div className="bg-white rounded-lg p-4">
 
-                                <td className="p-4">
-                                    {user.email}
-                                </td>
-                                <td className="p-4">
-                                    {user.branch?.name}
-                                </td>
+                <div className="flex justify-between items-center mb-3">  
+                    <TableSearch
+                        search={search}
+                        setSearch={setSearch}
+                    />
+                </div>
 
-                                <td className="p-4">
-                                    <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
-                                        Active
-                                    </span>
-                                </td>
+                <DataTable
+                    columns={usersColumns(toggleStatus, handleDelete)}
+                    data={paginatedData}
+                />
 
-                                <td className="p-4 flex gap-3">
-                                    <Link
-                                        to={`/users/edit/${user._id}`}
-                                        className="text-blue-600"
-                                    >
-                                        <FaEdit />
-                                    </Link>
-
-                                    <button
-                                        onClick={() =>
-                                            handleDelete(user._id)
-                                        }
-                                        className="text-red-600"
-                                    >
-                                        <FaTrash />
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                <TablePagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    setCurrentPage={setCurrentPage}
+                />
             </div>
+
             {loading && (
                 <div className="p-5 text-center">
                     Loading...

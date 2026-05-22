@@ -31,7 +31,7 @@ const ProfessionalInfo = () => {
                         </p>
 
                         <h3 className="font-semibold text-gray-800">
-                            {user.role}
+                            {user.role.name}
                         </h3>
                     </div>
                 </div>
@@ -82,7 +82,7 @@ const ProfessionalInfo = () => {
                         </p>
 
                         <h3 className="font-semibold text-gray-800">
-                            {user.branch}
+                            {user.branch.branch_name}
                         </h3>
                     </div>
                 </div>

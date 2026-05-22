@@ -1,12 +1,12 @@
 import { useState,useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "../../validation/authSchema";
 import { loginUser } from "../../features/auth/authThunks";
 import { USERS } from "../../constants/default";
+import toast from "react-hot-toast";
 import {
     FaEye,
     FaEyeSlash,
@@ -34,14 +34,14 @@ const LoginPage = () => {
         if (!localStorage.getItem("users")) {
             localStorage.setItem("users", JSON.stringify(USERS));
         }
-        if (USERS.length === 1) {
-            const user = USERS[0];
+        const savedUsers = JSON.parse(localStorage.getItem("users")) || [];
+        if (savedUsers.length === 1) {
+            const user = savedUsers[0];
             // Pre-fill the form with user data
             reset({
-                email: user.email
+                email: user?.email
             });
         }
-        // console.log(new Date(new Date()).toLocaleString('en-IN'));
     }, [USERS, reset]);
 
     const onSubmit = async(formData) => {
@@ -49,7 +49,7 @@ const LoginPage = () => {
             const result = await dispatch(loginUser(formData)).unwrap();
             console.log("Login Success:", result);
             toast.success("Login successful");
-            if (result.user.must_change_password) {
+            if (result.user?.must_change_password) {
                 navigate("/edu/change-password");
             } else {
                 navigate("/edu/dashboard");
@@ -152,16 +152,16 @@ const LoginPage = () => {
                     type="submit"
                     disabled={loading}
                     className="w-full bg-amber-200 disabled:bg-slate-400 text-blue-950 
-                    font-semibold text-base py-2 rounded-xl transition duration-300"
+                    font-semibold text-base py-2 rounded-xl transition duration-300 flex items-center justify-center gap-2"
                 >
                     {loading
                         ? (
                             <>
-                                <svg className="animate-spin motion-reduce:hidden" viewBox="0 0 24 24">
+                                <svg className="animate-spin motion-reduce:hidden w-5 h-5" viewBox="0 0 24 24">
                                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
                                 </svg>
-                                "Logging in..."
+                                <span>Logging in...</span>
                             </>
                         )
                         : "Login"}

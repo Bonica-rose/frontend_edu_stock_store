@@ -1,33 +1,18 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { changeUserPassword } from "../../features/auth/authThunks";
 import PasswordStrength from "../../components/ui/PasswordStrength";
 import { logout } from "../../features/auth/authSlice";
 import toast from "react-hot-toast";
+import { changePasswordSchema } from "../../validation/changePasswordSchema";
 import {
     FaEye,
     FaEyeSlash,
     FaLock,
 } from "react-icons/fa";
-
-const schema = yup.object({
-    current_password: yup.string().required("Current password is required"),
-    new_password: yup
-        .string()
-        .min(8, "Minimum 8 characters")
-        .matches(/[A-Z]/, "Must contain uppercase letter")
-        .matches(/[a-z]/, "Must contain lowercase letter")
-        .matches(/[0-9]/, "Must contain a number")
-        .required("New password is required"),
-    confirm_password: yup
-        .string()
-        .oneOf([yup.ref("new_password")], "Passwords must match")
-        .required("Confirm password is required"),
-});
 
 const ChangePassword = () => {
     const dispatch = useDispatch();
@@ -37,21 +22,24 @@ const ChangePassword = () => {
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+    const isForcedPasswordChange = user?.must_change_password;
+    console.log(isForcedPasswordChange)
     const {
         register,
         handleSubmit,
         watch,
         formState: { errors, isSubmitting },
     } = useForm({
-        resolver: yupResolver(schema),
+        resolver: yupResolver(changePasswordSchema),
     });
 
     const password = watch("new_password", "");
+    
 
     const onSubmit = async (data) => {
         try {
             // API call here            
-            console.log("Password data:", data);
+            // console.log("Password data:", data);
 
             const payload = {
                 user_id: user.id,
@@ -61,19 +49,16 @@ const ChangePassword = () => {
                 password_confirmation: data.confirm_password
             };
             
-            const res = await dispatch(changeUserPassword(payload)).unwrap();
+            const res = await dispatch(changeUserPassword(payload)).unwrap();  
+            console.log(res)
 
-            console.log(res,user)
-
-            // logout + redirect
-            // if (res.flag === 1) {
-
-            //     dispatch(logout());
-
-            //     navigate("/auth/login", {
-            //         replace: true
-            //     });
-            // }
+            // logout & redirect for first time forced password change
+            if (res.flag === 1 && isForcedPasswordChange) {
+                dispatch(logout());
+                navigate("/auth/login", {
+                    replace: true
+                });
+            }
         } catch (error) {
             toast.error(error);
         }
@@ -170,12 +155,13 @@ const ChangePassword = () => {
                         </button>
                     </div>
 
-                    {/* Password Strength */}
-                    <PasswordStrength password={password} outside={false} />
-
                     <p className="text-red-500 text-sm">
                         {errors.new_password?.message}
                     </p>
+
+                    {/* Password Strength */}
+                    <PasswordStrength password={password} outside={false} />
+                    
                 </div>
 
                 {/* Confirm Password */}
@@ -234,18 +220,6 @@ const ChangePassword = () => {
                     {isSubmitting ? "Updating..." : "Update Password"}
                 </button>
 
-            </form>
-
-            <form >
-
-
-                
-
-                
-
-                
-
-                
             </form>
         </div>
     );

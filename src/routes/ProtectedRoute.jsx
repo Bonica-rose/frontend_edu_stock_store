@@ -4,15 +4,18 @@ import {
     Outlet,
     useLocation,
 } from "react-router-dom";
+import Loader from '../components/ui/Loader'
 
 const ProtectedRoute = () => {
     const location = useLocation();
 
     const { isAuthenticated, loading, user } = useSelector((state) => state.auth);
 
+    // console.log('From Protected Route - redux user: ',user);
+
     // Optional Loading Screen
     if (loading) {
-        return <div>Loading...</div>;
+        return <Loader />;
     }
 
     // Not Logged In

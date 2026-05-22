@@ -7,7 +7,7 @@ export default function RoleRoute({ allowedRoles }) {
 
     // Example: user.role = "inventory_staff"
 
-    if (!allowedRoles.includes(user?.role)) {
+    if (!allowedRoles.includes(user?.role.name)) {
         return (
             <Navigate to="/edu/403" replace />
         );

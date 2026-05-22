@@ -1,62 +1,24 @@
 import { NavLink } from "react-router-dom";
 import logoImage from '../assets/logo.png';
 import { SIDEBAR_LINKS } from "../constants/sidebarConfig.jsx";
+import { hasPermission } from "../helpers/hasPermission.js";
 import { useSelector } from "react-redux";
 
-
 const Sidebar = ({ collapsed, mobileOpen, setMobileOpen }) => {
-    // const links = [
-    //     {
-    //         path: "/edu/dashboard",
-    //         label: "Dashboard",
-    //         icon: <FaTachometerAlt />,
-    //     },
-    //     {
-    //         path: "/edu/products",
-    //         label: "Products",
-    //         icon: <FaBoxes />,
-    //     },
-    //     {
-    //         path: "/edu/assets",
-    //         label: "Assets",
-    //         icon: <FaLaptop />,
-    //     },
-    //     {
-    //         path: "/edu/vendors",
-    //         label: "Vendors",
-    //         icon: <FaTruck />,
-    //     },
-    //     {
-    //         path: "/edu/purchases",
-    //         label: "Purchases",
-    //         icon: <FaShoppingCart />,
-    //     },
-    //     {
-    //         path: "/edu/stocks",
-    //         label: "Stock Movement",
-    //         icon: <FaExchangeAlt />,
-    //     },
-    //     {
-    //         path: "/edu/reports",
-    //         label: "Reports",
-    //         icon: <FaChartBar />,
-    //     },
-    //     {
-    //         path: "/edu/branches",
-    //         label: "Branches",
-    //         icon: <LuGitBranch />,
-    //     },
-    //     {
-    //         path: "/edu/users",
-    //         label: "Users",
-    //         icon: <FaUsers />,
-    //     },
-    // ];
 
     const { user } = useSelector((state) => state.auth);
 
-    const filteredLinks = SIDEBAR_LINKS.filter((link) =>
-        link.roles.includes(user?.role)
+    // const filteredLinks = SIDEBAR_LINKS.filter((link) =>
+    //     link.roles.includes(user?.role)
+    // );
+
+    const filteredLinks = SIDEBAR_LINKS.filter(
+        (link) =>
+            hasPermission(
+                user?.role.name,
+                link.permission.module,
+                link.permission.action
+            )
     );
 
     return (

@@ -1,32 +1,37 @@
 import { useSelector } from "react-redux";
 
-// import MaintenanceStaffDashboard from "./MaintenanceStaffDashboard";
-import InventoryStaffDashboard from "./InventoryStaffDashboard";
+import StaffDashboard from "./StaffDashboard";
 import SuperAdminDashboard from "./SuperAdminDashboard";
 import BranchHeadDashboard from "./BranchHeadDashboard";
-// import AuditorDashboard from "./AuditorDashboard";
+import InventoryManagerDashboard from './InventoryManagerDashboard';
+import PurchaseManagerDashboard from './PurchaseManagerDashboard'
+import AssetManagerDashboard from './AssetManagerDashboard'
 
 const OverviewPage = () => {    
 
     const { user } = useSelector((state) => state.auth);
 
-    if (user.role === "super_admin") {
+    if (user.role.name === "super_admin") {
         return <SuperAdminDashboard />;
     }
 
-    if (user.role === "branch_head") {
+    if (user.role.name === "branch_head") {
         return <BranchHeadDashboard />;
     }
 
-    // if (user.role === "auditor") {
-    //     return <AuditorDashboard />;
-    // }
+    if (user.role.name === "inventory_manager") {
+        return <InventoryManagerDashboard />;
+    }
 
-    // if (user.role === "maintenance_staff") {
-    //     return <MaintenanceStaffDashboard />;
-    // }
+    if (user.role.name === "asset_manager") {
+        return <AssetManagerDashboard />;
+    }
 
-    return <InventoryStaffDashboard />;
+    if (user.role.name === "purchase_manager") {
+        return <PurchaseManagerDashboard />;
+    }
+
+    return <StaffDashboard />;
 }
 
 export default OverviewPage;

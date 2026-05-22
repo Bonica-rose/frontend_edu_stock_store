@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -14,8 +14,6 @@ import {
     FaLock,
     FaUser,
     FaUserTag,
-    // FaCheckCircle,
-    // FaTimesCircle,
 } from "react-icons/fa";
 
 const RegisterPage = () => {
@@ -37,41 +35,6 @@ const RegisterPage = () => {
 
     const password = watch("password", "");
 
-    // Password Strength Checks
-    // const passwordChecks = {
-    //     length: password.length >= 8,
-    //     uppercase: /[A-Z]/.test(password),
-    //     lowercase: /[a-z]/.test(password),
-    //     number: /[0-9]/.test(password),
-    //     special: /[@$!%*?&]/.test(password),
-    // };
-
-    // const passedChecks = Object.values(passwordChecks).filter(Boolean).length;
-
-    // Strength Label
-    // const getStrength = () => {
-
-    //     if (passedChecks <= 2)
-    //         return {
-    //             text: "Weak",
-    //             color: "bg-red-500",
-    //         };
-
-    //     if (passedChecks === 3 || passedChecks === 4)
-    //         return {
-    //             text: "Medium",
-    //             color: "bg-yellow-500",
-    //         };
-
-    //     return {
-    //         text: "Strong",
-    //         color: "bg-green-500",
-    //     };
-
-    // };
-
-    // const strength = getStrength();
-
     const onSubmit = async (formData) => {
         try {
             const result = await dispatch(registerUser(formData)).unwrap();
@@ -84,28 +47,6 @@ const RegisterPage = () => {
             toast.error(error);
         }
     };   
-
-    // const PolicyItem = ({ valid, text }) => (
-    //     <div className="flex items-center gap-2 text-sm">
-
-    //         {valid ? (
-    //             <FaCheckCircle className="text-green-400" />
-    //         ) : (
-    //             <FaTimesCircle className="text-red-400" />
-    //         )}
-
-    //         <span
-    //             className={
-    //                 valid
-    //                     ? "text-green-300"
-    //                     : "text-slate-400"
-    //             }
-    //         >
-    //             {text}
-    //         </span>
-
-    //     </div>
-    // );
 
     return (
         <div className="w-full max-w-lg bg-blue-950 border border-slate-800 rounded-2xl shadow-2xl p-8">
@@ -122,7 +63,7 @@ const RegisterPage = () => {
             >
 
                 {/* Full Name */}
-                <div>
+                {/* <div>
                     <label className="block text-base font-medium text-slate-300 mb-2">Full Name</label>
                     <div className="relative">
                         <FaUser className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-900" />
@@ -144,7 +85,7 @@ const RegisterPage = () => {
                         </p>
                     )}
 
-                </div>
+                </div> */}
 
                 {/* Username */}
                 <div>

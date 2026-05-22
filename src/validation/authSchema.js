@@ -2,11 +2,11 @@ import * as yup from "yup";
 
 export const registerSchema = yup.object({
 
-    fullName: yup
-        .string()
-        .trim()
-        .required("Full name is required")
-        .min(3, "Full name must be at least 3 characters"),
+    // fullName: yup
+    //     .string()
+    //     .trim()
+    //     .required("Full name is required")
+    //     .min(3, "Full name must be at least 3 characters"),
 
     username: yup
         .string()
@@ -24,6 +24,7 @@ export const registerSchema = yup.object({
         .lowercase()
         .email("Invalid email format")
         .matches(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/, "Enter a valid email address")
+        .max(100, "Email is too long")
         .required("Email is required"),
 
     password: yup
@@ -49,11 +50,14 @@ export const loginSchema = yup.object({
     email: yup
         .string()
         .trim()
-        .email("Please enter a valid email")
+        .lowercase()
+        .email("Invalid email format")
+        .matches(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/, "Enter a valid email address")
+        .max(100, "Email is too long")
         .required("Email is required"),
 
     password: yup
         .string()
-        .min(6, "Password must be at least 6 characters")
+        .min(8, "Password must be at least 8 characters")
         .required("Password is required"),
 });

@@ -3,13 +3,14 @@ import {
     Navigate,
     Outlet,
 } from "react-router-dom";
+import Loader from "../components/ui/Loader";
 
 const PublicRoute = () => {
     const { isAuthenticated, loading } =
         useSelector((state) => state.auth);
     
     if (loading) {
-        return <div>Loading...</div>;
+        return <Loader />
     }
 
     return isAuthenticated
